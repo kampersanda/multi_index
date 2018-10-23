@@ -95,7 +95,7 @@ FOREACH(test_case ${test_cases})
                        DEPENDS ham_distribution
                        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
                        COMMENT "Calculating hamming weight distribution for ${test_case}" VERBATIM)
-ENDFOREACH(test_case) 
+ENDFOREACH(test_case)
 
 ADD_CUSTOM_TARGET(input_info DEPENDS ${input_infos})
 
@@ -114,16 +114,16 @@ FOREACH(line ${exp0_lines})
     STRING(REPLACE "," ";" error_list ${errors})
     MESSAGE("Exp 0 ${index_name}; ${index_type}; ${error_list}")
     FOREACH(t_k ${error_list})
-        STRING(REGEX REPLACE "([,<])t_k([,>])" "\\1${t_k}\\2" type ${index_type}) 
+        STRING(REGEX REPLACE "([,<])t_k([,>])" "\\1${t_k}\\2" type ${index_type})
         GEN_PERM_FILE(${type} blocks)
         SET(exec ${index_name}_index_${t_k})
         IF(NOT TARGET ${exec})
             ADD_EXECUTABLE(${exec} src/index.cpp)
             TARGET_LINK_LIBRARIES(${exec} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-            SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS 
+            SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS
                          BLOCKS=${blocks}
-                         K=${t_k} 
-                         INDEX_TYPE=${index_type} 
+                         K=${t_k}
+                         INDEX_TYPE=${index_type}
                          INDEX_NAME="${index_name}")
         ENDIF()
         FOREACH(test_case ${test_cases})
@@ -133,7 +133,7 @@ FOREACH(line ${exp0_lines})
             IF(NOT TARGET ${exp0_result})
                 ADD_CUSTOM_COMMAND(OUTPUT ${exp0_result}
 #                                   COMMAND sh -c "echo 1 >/proc/sys/vm/drop_caches"
-#                                   COMMAND sh -c "sync && purge"                        
+#                                   COMMAND sh -c "sync && purge"
                                    COMMAND $<TARGET_FILE:${exec}> ${abs_test_case}.data ${abs_test_case}.query 0 > ${exp0_result}
 #                                   COMMAND sh -c "echo 1 >/proc/sys/vm/drop_caches"
                                    COMMAND $<TARGET_FILE:${exec}> ${abs_test_case}.data ${abs_test_case}.query 1 >> ${exp0_result}
@@ -147,12 +147,18 @@ FOREACH(line ${exp0_lines})
     ENDFOREACH()
 ENDFOREACH()
 
+# ADD_CUSTOM_TARGET(exp0
+#                   COMMAND cat ${exp0_results} > ${exp0_result_file}
+#                   COMMAND R CMD BATCH ../scripts/exp0.R
+#                   DEPENDS ${exp0_results}
+#                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#                   COMMENT "\nResults can be found in ${exp0_result_file}.\nVisualization in file exp0.pdf\n")
+
 ADD_CUSTOM_TARGET(exp0
                   COMMAND cat ${exp0_results} > ${exp0_result_file}
-                  COMMAND R CMD BATCH ../scripts/exp0.R
                   DEPENDS ${exp0_results}
                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                  COMMENT "\nResults can be found in ${exp0_result_file}.\nVisualization in file exp0.pdf\n")
+                  COMMENT "\nResults can be found in ${exp0_result_file}.\n")
 
 ## Experiment 1: Measure the efficiency of the searching phase
 SET(exp1_result_file "${CMAKE_BINARY_DIR}/results/exp1.result.txt")
@@ -166,16 +172,16 @@ FOREACH(line ${exp1_lines})
     STRING(REPLACE "," ";" error_list ${errors})
     MESSAGE("Exp 1 ${index_name}; ${index_type}; ${error_list}")
     FOREACH(t_k ${error_list})
-        STRING(REGEX REPLACE "([,<])t_k([,>])" "\\1${t_k}\\2" type ${index_type}) 
+        STRING(REGEX REPLACE "([,<])t_k([,>])" "\\1${t_k}\\2" type ${index_type})
         GEN_PERM_FILE(${type} blocks)
         SET(exec ${index_name}_index_${t_k})
         IF(NOT TARGET ${exec})
             ADD_EXECUTABLE(${exec} src/index.cpp)
             TARGET_LINK_LIBRARIES(${exec} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-            SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS 
+            SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS
                          BLOCKS=${blocks}
-                         K=${t_k} 
-                         INDEX_TYPE=${index_type} 
+                         K=${t_k}
+                         INDEX_TYPE=${index_type}
                          INDEX_NAME="${index_name}")
         ENDIF()
         FOREACH(test_case ${test_cases})
@@ -185,7 +191,7 @@ FOREACH(line ${exp1_lines})
             IF(NOT TARGET ${exp1_result})
                 ADD_CUSTOM_COMMAND(OUTPUT ${exp1_result}
 #                                   COMMAND sh -c "echo 1 >/proc/sys/vm/drop_caches"
-#                                   COMMAND sh -c "sync && purge"                        
+#                                   COMMAND sh -c "sync && purge"
                                    COMMAND $<TARGET_FILE:${exec}> ${abs_test_case}.data ${abs_test_case}.query 0 > ${exp1_result}
 #                                   COMMAND sh -c "echo 1 >/proc/sys/vm/drop_caches"
                                    COMMAND $<TARGET_FILE:${exec}> ${abs_test_case}.data ${abs_test_case}.query 1 >> ${exp1_result}
@@ -199,12 +205,18 @@ FOREACH(line ${exp1_lines})
     ENDFOREACH()
 ENDFOREACH()
 
+# ADD_CUSTOM_TARGET(exp1
+#                   COMMAND cat ${exp1_results} > ${exp1_result_file}
+#                   COMMAND R CMD BATCH ../scripts/exp1.R
+#                   DEPENDS ${exp1_results}
+#                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+#                   COMMENT "\nResults can be found in ${exp1_result_file}.")
+
 ADD_CUSTOM_TARGET(exp1
                   COMMAND cat ${exp1_results} > ${exp1_result_file}
-                  COMMAND R CMD BATCH ../scripts/exp1.R
                   DEPENDS ${exp1_results}
                   WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-                  COMMENT "\nResults can be found in ${exp1_result_file}.")
+                  COMMENT "\nResults can be found in ${exp1_result_file}.\n")
 
 ## Experiment 2
 #
@@ -229,10 +241,10 @@ ADD_CUSTOM_TARGET(exp1
 #        MESSAGE("Add target ${exec}")
 #        ADD_EXECUTABLE(${exec} src/index.cpp)
 #        TARGET_LINK_LIBRARIES(${index_name}_index_${blocks}_${errors} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS 
+#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS
 #                     N=${blocks}
-#                     K=${errors} 
-#                     INDEX_TYPE=${index_type} 
+#                     K=${errors}
+#                     INDEX_TYPE=${index_type}
 #                     INDEX_NAME="${index_name}")
 #    ENDIF(NOT TARGET ${exec})
 #
@@ -282,10 +294,10 @@ ADD_CUSTOM_TARGET(exp1
 #    IF(NOT TARGET ${exec})
 #        ADD_EXECUTABLE(${exec} src/index.cpp)
 #        TARGET_LINK_LIBRARIES(${index_name}_index_${blocks}_${errors} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS 
+#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS
 #                     N=${blocks}
-#                     K=${errors} 
-#                     INDEX_TYPE=${index_type} 
+#                     K=${errors}
+#                     INDEX_TYPE=${index_type}
 #                     INDEX_NAME="${index_name}")
 #    ENDIF(NOT TARGET ${exec})
 #
@@ -343,19 +355,19 @@ ADD_CUSTOM_TARGET(exp1
 #    IF(NOT TARGET ${exec})
 #        ADD_EXECUTABLE(${exec} src/index.cpp)
 #        TARGET_LINK_LIBRARIES(${index_name}_index_${blocks}_${errors} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS 
+#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS
 #                     N=${blocks}
-#                     K=${errors} 
-#                     INDEX_TYPE=${index_type} 
+#                     K=${errors}
+#                     INDEX_TYPE=${index_type}
 #                     INDEX_NAME="${index_name}")
 #    ENDIF(NOT TARGET ${exec})
 #    ADD_EXECUTABLE(${exec_rs} src/index.cpp)
 #    TARGET_LINK_LIBRARIES(${index_name}_index_rs_${blocks}_${errors} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-#    SET_PROPERTY(TARGET ${index_name}_index_rs_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS 
+#    SET_PROPERTY(TARGET ${index_name}_index_rs_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS
 #                 N=${blocks}
-#                 K=${errors} 
+#                 K=${errors}
 #                 STATS=1
-#                 INDEX_TYPE=${index_type} 
+#                 INDEX_TYPE=${index_type}
 #                 INDEX_NAME="${index_name}")
 #
 #
@@ -429,10 +441,10 @@ ADD_CUSTOM_TARGET(exp1
 #    IF(NOT TARGET ${exec})
 #        ADD_EXECUTABLE(${exec} src/index.cpp)
 #        TARGET_LINK_LIBRARIES(${index_name}_index_${blocks}_${errors} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS 
+#        SET_PROPERTY(TARGET ${index_name}_index_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS
 #                     N=${blocks}
-#                     K=${errors} 
-#                     INDEX_TYPE=${index_type} 
+#                     K=${errors}
+#                     INDEX_TYPE=${index_type}
 #                     INDEX_NAME="${index_name}")
 #    ENDIF(NOT TARGET ${exec})
 #
@@ -487,10 +499,10 @@ ADD_CUSTOM_TARGET(exp1
 #    IF(NOT TARGET ${exec})
 #        ADD_EXECUTABLE(${exec} src/cluster_statistics.cpp)
 #        TARGET_LINK_LIBRARIES(${index_name}_stat_${blocks}_${errors} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-#        SET_PROPERTY(TARGET ${index_name}_stat_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS 
+#        SET_PROPERTY(TARGET ${index_name}_stat_${blocks}_${errors} PROPERTY COMPILE_DEFINITIONS
 #                     N=${blocks}
-#                     K=${errors} 
-#                     INDEX_TYPE=${index_type} 
+#                     K=${errors}
+#                     INDEX_TYPE=${index_type}
 #                     INDEX_NAME="${index_name}")
 #    ENDIF(NOT TARGET ${exec})
 #
@@ -535,10 +547,10 @@ ADD_CUSTOM_TARGET(exp1
 #    SET(exec ${index_name}_${errors})
 #    ADD_EXECUTABLE(${exec} src/index.cpp)
 #    TARGET_LINK_LIBRARIES(${exec} sdsl -ggdb divsufsort divsufsort64 multi_idx pthread)
-#        SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS 
+#        SET_PROPERTY(TARGET ${exec} PROPERTY COMPILE_DEFINITIONS
 #                     N=0
-#                     K=${errors} 
-#                     INDEX_TYPE=${index_type} 
+#                     K=${errors}
+#                     INDEX_TYPE=${index_type}
 #                     INDEX_NAME="${index_name}")
 #
 #    FOREACH(test_case ${test_cases})

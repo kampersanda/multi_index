@@ -40,7 +40,7 @@ namespace multi_index {
         /* Low_* stuff control how many of the less signifigant bits form the lower part */
         static constexpr uint8_t    low_bits    = 32; // PLS, keep this a power of 2, better if word aligned
         static constexpr uint64_t   low_mask    = (1ULL<<low_bits)-1;
-        static constexpr uint8_t    splitter_bits = init_splitter_bits();
+        static constexpr uint8_t    splitter_bits = init_splitter_bits(0);
         static constexpr uint8_t    mid_bits = 64 - (low_bits + splitter_bits);
         static constexpr uint8_t    mid_shift   = low_bits; 
         static constexpr uint64_t   mid_mask = (1ULL<<mid_bits)-1;

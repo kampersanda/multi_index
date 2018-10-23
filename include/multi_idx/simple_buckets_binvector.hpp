@@ -37,7 +37,7 @@ namespace multi_index {
         t_sel                 m_C_sel; // select1 structure for m_C 
 
     public:
-        static constexpr uint8_t    splitter_bits = init_splitter_bits();
+        static constexpr uint8_t    splitter_bits = init_splitter_bits(0);
 
         _simple_buckets_binvector() = default;
 

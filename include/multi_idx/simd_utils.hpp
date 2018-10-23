@@ -1,5 +1,8 @@
 #pragma once
 
+#include <tmmintrin.h>
+#include <nmmintrin.h>
+
 const __m128i lookup = _mm_setr_epi8(
     /* 0 */ 0, /* 1 */ 1, /* 2 */ 1, /* 3 */ 2,
     /* 4 */ 1, /* 5 */ 2, /* 6 */ 2, /* 7 */ 3,

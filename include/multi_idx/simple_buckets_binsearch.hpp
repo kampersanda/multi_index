@@ -32,7 +32,7 @@ private:
     sdsl::int_vector<64>  m_entries; 
 
 public:
-    static constexpr uint8_t splitter_bits = init_splitter_bits();
+    static constexpr uint8_t splitter_bits = init_splitter_bits(0);
 
     _simple_buckets_binsearch() = default;
 

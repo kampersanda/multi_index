@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <array>
 #include <vector>
 #include <algorithm>
 #include "sdsl/bit_vectors.hpp"
@@ -8,7 +9,7 @@
 template<uint8_t t_splitter_bits, uint8_t t_block_errors>
 struct splitter_mask{
     static constexpr size_t binomial(size_t n, size_t k){
-        if ( n < k ) 
+        if ( n < k )
             return 0;
         if ( k == 0 or n == k )
             return 1;

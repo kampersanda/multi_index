@@ -40,7 +40,7 @@ typedef string t_string;
   // ought to be -1 for C(++), 0 for Pascal
 #define maxint 32767
   // ought to be maximum value of t_int
-#define assert(x)
+// #define assert(x)
   // raise exception if not x
 mycall void write(const t_string s) { cout << s; }
 mycall void writeln(const t_string s) { cout << s << "\n"; }
