@@ -9,7 +9,9 @@ To be described
 ./install.sh
 mkdir build
 cd build
-cmake .. && make exp0
+cmake ..
+cmake ..
+make exp0
 ```
 
 Getting Started
