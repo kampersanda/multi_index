@@ -116,6 +116,8 @@ int main(int argc, char* argv[]){
 
     {
         ifstream idx_ifs(idx_file);
+        cout << "# idx_file = " << idx_file << endl;
+
         if ( !idx_ifs.good() ){
              vector<uint64_t> keys = load_keys(hash_file);
             {   
